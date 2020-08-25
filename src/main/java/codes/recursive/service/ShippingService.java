@@ -1,9 +1,11 @@
 package codes.recursive.service;
 
+import codes.recursive.domain.Order;
 import codes.recursive.domain.Shipment;
 
 import javax.inject.Singleton;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Singleton
@@ -28,7 +30,8 @@ public class ShippingService {
         shipments.set(i, shipment);
     }
     
-    public void newShipment(Shipment shipment) {
+    public void newShipment(Order order) {
+        Shipment shipment = new Shipment((long) shipments.size(), order.getId(), new Date());
         shipments.add(shipment);
     }
 
