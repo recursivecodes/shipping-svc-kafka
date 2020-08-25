@@ -30,9 +30,10 @@ public class ShippingService {
         shipments.set(i, shipment);
     }
     
-    public void newShipment(Order order) {
+    public Shipment newShipment(Order order) {
         Shipment shipment = new Shipment((long) shipments.size(), order.getId(), new Date());
         shipments.add(shipment);
+        return shipment;
     }
 
 }
