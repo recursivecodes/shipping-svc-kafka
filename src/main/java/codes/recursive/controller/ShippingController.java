@@ -22,10 +22,10 @@ public class ShippingController {
         return "Example Response";
     }
 
-    @Get("/shipments/recent")
-    public HttpResponse<List<Shipment>> getRecentShipments() {
+    @Get("/shipments/recent/{count}")
+    public HttpResponse<List<Shipment>> getRecentShipments(Long count) {
         return HttpResponse.ok(
-                shippingService.listShipments().stream().limit(5).collect(Collectors.toList())
+                shippingService.listShipments().stream().limit(count).collect(Collectors.toList())
         );
     }
 }
