@@ -1,4 +1,5 @@
 package codes.recursive.messaging;
+
 import codes.recursive.domain.Order;
 import codes.recursive.domain.Shipment;
 import codes.recursive.service.ShippingService;
@@ -10,19 +11,13 @@ import io.reactivex.Single;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.UUID;
-
 @KafkaListener(offsetReset = OffsetReset.LATEST)
 public class OrderConsumer {
-
     private static final Logger LOG = LoggerFactory.getLogger(OrderConsumer.class);
-
     private final ShippingService shippingService;
-    private final ShipmentProducer shipmentProducer;
 
-    public OrderConsumer(ShippingService shippingService, ShipmentProducer shipmentProducer) {
+    public OrderConsumer(ShippingService shippingService) {
         this.shippingService = shippingService;
-        this.shipmentProducer = shipmentProducer;
     }
 
     @Topic("order-topic")
@@ -36,10 +31,6 @@ public class OrderConsumer {
             /* shipping is slow! */
             Thread.sleep(15*1000);
             Shipment shipment = shippingService.newShipment(order);
-            LOG.info("Shipment created!");
-            LOG.info("Sending shipment message...");
-            shipmentProducer.sendMessage(UUID.randomUUID().toString(), shipment);
-            LOG.info("Shipment message sent!");
         });
     }
 }
