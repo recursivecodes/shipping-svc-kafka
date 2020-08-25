@@ -2,18 +2,25 @@ package codes.recursive.service;
 
 import codes.recursive.domain.Order;
 import codes.recursive.domain.Shipment;
+import codes.recursive.messaging.ShipmentProducer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Singleton
 public class ShippingService {
-
+    private static final Logger LOG = LoggerFactory.getLogger(ShippingService.class);
+    
+    private final ShipmentProducer shipmentProducer;
     private List<Shipment> shipments = new ArrayList<>();
 
-    public ShippingService() {
+    public ShippingService(ShipmentProducer shipmentProducer) {
+        this.shipmentProducer = shipmentProducer;
     }
 
     public Shipment getShipmentById(Long id) {
@@ -33,6 +40,10 @@ public class ShippingService {
     public Shipment newShipment(Order order) {
         Shipment shipment = new Shipment((long) shipments.size(), order.getId(), new Date());
         shipments.add(shipment);
+        LOG.info("Shipment created!");
+        LOG.info("Sending shipment message...");
+        shipmentProducer.sendMessage(UUID.randomUUID().toString(), shipment);
+        LOG.info("Shipment message sent!");
         return shipment;
     }
 
