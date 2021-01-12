@@ -26,11 +26,12 @@ public class OrderConsumer {
             Single<Order> orderFlowable) {
 
         return orderFlowable.doOnSuccess(order -> {
-            LOG.info("Order with key {} received!", key);
+            LOG.info("Order with id {} received!", order.getId());
             LOG.info("Creating shipment...");
             /* shipping is slow! */
             Thread.sleep(15*1000);
             Shipment shipment = shippingService.newShipment(order);
+            LOG.info("Shipped order {} with shipment ID {}...", order.getId(), shipment.getId());
         });
     }
 }

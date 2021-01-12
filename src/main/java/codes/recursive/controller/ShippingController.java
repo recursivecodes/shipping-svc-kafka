@@ -17,11 +17,6 @@ public class ShippingController {
         this.shippingService = shippingService;
     }
 
-    @Get(uri="/", produces="text/plain")
-    public String index() {
-        return "Example Response";
-    }
-
     @Get("/shipments/recent/{count}")
     public HttpResponse<List<Shipment>> getRecentShipments(Long count) {
         return HttpResponse.ok(
